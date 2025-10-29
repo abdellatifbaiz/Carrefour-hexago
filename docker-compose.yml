@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./kata
+      dockerfile: Dockerfile
+    container_name: java-kata-backend
+    ports:
+      - "8080:8080"
+      - "9092:9092"
+    networks:
+      - kata-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./ng-pym-kata
+      dockerfile: Dockerfile
+    container_name: ng-kata-frontend
+    ports:
+      - "80:80"
+    networks:
+      - kata-network
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+networks:
+  kata-network:
+    driver: bridge

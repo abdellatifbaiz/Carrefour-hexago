@@ -1,0 +1,67 @@
+@for(order of orders(); track order.id){
+
+  <div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header bg-dark text-white">
+        <h4 class="mb-0"><strong>Order ID:</strong> {{ order.id }}</h4>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <strong>Total Amount:</strong> {{ order.amount}} €
+          </div>
+          <div class="col-md-4">
+            <strong>Payment Option:</strong> {{ getOptionLabel(order.paymentOption) }}
+          </div>
+        </div>
+        @if (order.installments.length != 0){
+          <div>
+            <h5 class="mt-4">Installments</h5>
+            <table class="table table-bordered table-striped mt-2">
+              <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Amount</th>
+                <th>Due Date</th>
+                <th>Status</th>
+              </tr>
+              </thead>
+              <tbody>
+                @for(installment of order.installments;track installment.id){
+                  <tr>
+                    <td>{{ installment.id }}</td>
+                    <td>{{ installment.amount}} €</td>
+                    <td>{{ installment.dueDate}}</td>
+                    <td>
+                <span [ngClass]="installment.status ? 'text-success fw-bold' : 'text-danger fw-bold'">
+                  {{ installment.status ? 'Paid' : 'Pending' }}
+                </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+        @if (!order.installments || order.installments.length === 0){
+          <div class="alert alert-info mt-3">
+            No installments available. You have to choose a payment option.
+          </div>
+          <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#paymentOptionModal" (click)="openPopup(order)" >
+            Choose Payment Option
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+<ngb-pagination
+  [collectionSize]="totalItems"
+  [(page)]="page"
+  [pageSize]="pageSize"
+  (pageChange)="onPageChange($event)"
+  class="d-flex justify-content-center">
+</ngb-pagination>
+
+

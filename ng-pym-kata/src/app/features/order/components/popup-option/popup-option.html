@@ -1,0 +1,60 @@
+<div class="container">
+  <div class="modal-header">
+    <h5 class="modal-title" id="paymentOptionModalLabel">Select a Payment Option</h5>
+  </div>
+  @if (errorMessage()) {
+    <div class="alert alert-warning" role="alert">
+      {{ errorMessage() }}
+    </div>
+  }
+  <div class="modal-body">
+    <div class="list-group">
+      <button type="button" class="list-group-item list-group-item-action" [ngClass]="{ 'active': paymentOptionSelected() === 'BANK_TRANSFER' }" (click)="selectOption('BANK_TRANSFER')">
+        Bank transfer + 1€
+      </button>
+      <button type="button" class="list-group-item list-group-item-action" [ngClass]="{ 'active': paymentOptionSelected() === 'THREE_TIMES_NO_FEES' }" (click)="selectOption('THREE_TIMES_NO_FEES')">
+        Pay in 3 (No Fees)
+      </button>
+      <button type="button" class="list-group-item list-group-item-action" [ngClass]="{ 'active': paymentOptionSelected() === 'FOUR_TIMES_WITH_FEES' }" (click)="selectOption('FOUR_TIMES_WITH_FEES')">
+        Pay in 4 (With Fees)
+      </button>
+    </div>
+  </div>
+
+  @if (true){
+    <div>
+      <table class="table table-bordered table-striped">
+        <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Due Date</th>
+          <th>Amount</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for ( installment of genreatedOrder()?.installments ; track installment.id) {
+            <tr>
+              <td>{{ installment.id }}</td>
+              <td>{{ installment.dueDate | date: 'longDate' }}</td>
+              <td>{{ installment.amount | currency:'EUR'}} </td>
+              <td>
+                  <span class="badge" [ngClass]="{
+                    'bg-success': installment.status,
+                    'bg-warning text-dark': !installment.status
+                  }">
+                    {{ installment.status ? 'Paid' : 'Pending' }}
+                  </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary m-3"  (click)="closePopup()">Cancel</button>
+    <button type="button" class="btn btn-secondary"  [disabled]="!genreatedOrder()?.installments?.length" (click)="confirm()">Confirme</button>
+  </div>
+
+</div>
