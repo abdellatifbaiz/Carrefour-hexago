@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                dir("c4-sf-2025-10-16-java-kata-abde/kata"){
+                dir("Carrefour-hexago/kata"){
                     sh "mvn clean install"
                 }
             }
@@ -11,7 +11,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                dir("c4-sf-2025-10-16-java-kata-abde/kata"){
+                dir("Carrefour-hexago/kata"){
                     sh "mvn test"
                 }
             }
