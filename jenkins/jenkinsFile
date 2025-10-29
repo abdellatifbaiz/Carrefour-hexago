@@ -1,0 +1,20 @@
+pipeline {
+    agent any
+    stages {
+        stage('build') {
+            steps {
+                dir("c4-sf-2025-10-16-java-kata-abde/kata"){
+                    sh "mvn clean install"
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir("c4-sf-2025-10-16-java-kata-abde/kata"){
+                    sh "mvn test"
+                }
+            }
+        }
+    }
+}
